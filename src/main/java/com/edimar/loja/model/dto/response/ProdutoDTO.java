@@ -1,40 +1,23 @@
-package com.edimar.loja.model;
+package com.edimar.loja.model.dto.response;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import com.edimar.loja.model.Produto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
-public class Produto implements Serializable {
+public class ProdutoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private Integer id;
 	private String descricao;
 	private String categoria;
 	private Double preco;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "id.produto")
-	private Set<ItemPedido> itemPedidos = new HashSet<>();
-	
-	public Produto() {
+	public ProdutoDTO() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	public Produto(Integer id, String descricao, String categoria, Double preco) {
+
+	public ProdutoDTO(Integer id, String descricao, String categoria, Double preco) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
@@ -42,44 +25,44 @@ public class Produto implements Serializable {
 		this.preco = preco;
 	}
 	
-	@JsonIgnore
-	public List<Pedido> getPedidos(){
-		List<Pedido> listPedidos = new ArrayList<>();
-		for(ItemPedido item : itemPedidos) {
-			listPedidos.add(item.getPedido());
-		}
-		return listPedidos;
+	public ProdutoDTO(Produto produto) {
+		super();
+		this.id = produto.getId();
+		this.descricao = produto.getDescricao();
+		this.categoria = produto.getCategoria();
+		this.preco = produto.getPreco();
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 	public String getCategoria() {
 		return categoria;
 	}
+
 	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
+
 	public Double getPreco() {
 		return preco;
 	}
+
 	public void setPreco(Double preco) {
 		this.preco = preco;
-	}
-	public Set<ItemPedido> getItemPedidos() {
-		return itemPedidos;
-	}
-	public void setItemPedidos(Set<ItemPedido> itemPedidos) {
-		this.itemPedidos = itemPedidos;
 	}
 
 	@Override
@@ -98,18 +81,12 @@ public class Produto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Produto other = (Produto) obj;
+		ProdutoDTO other = (ProdutoDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Produto [id=" + id + ", descricao=" + descricao + ", categoria=" + categoria + ", preco=" + preco
-				+ ", itemPedidos=" + itemPedidos + "]";
 	}
 }

@@ -5,16 +5,18 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
 
 	private Integer qtde;
-	private Double valorTotalItensPedido;
 	
 	public ItemPedido() {
 		// TODO Auto-generated constructor stub
@@ -27,6 +29,7 @@ public class ItemPedido implements Serializable{
 		this.qtde = qtde;
 	}
 	
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
@@ -49,13 +52,6 @@ public class ItemPedido implements Serializable{
 
 	public void setQtde(Integer qtde) {
 		this.qtde = qtde;
-	}
-
-	public Double getValorTotalItensPedido() {
-		System.out.println();
-		System.out.println(" getPedido -> " + getPedido().toString());
-		System.out.println();
-		return getPedido() == null ? null : getPedido().getValorTotalPedido() * qtde;
 	}
 
 	@Override
@@ -85,6 +81,6 @@ public class ItemPedido implements Serializable{
 
 	@Override
 	public String toString() {
-		return "ItemPedido [id=" + id + ", qtde=" + qtde + ", valorTotalItensPedido=" + valorTotalItensPedido + "]";
+		return "ItemPedido [idPedido=" + id.getPedido() + ", idProduto=" + id.getProduto() + ", qtde=" + qtde + "]";
 	}
 }

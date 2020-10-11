@@ -1,28 +1,15 @@
-package com.edimar.loja.model;
+package com.edimar.loja.model.dto.response;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
-public class Cliente implements Serializable{
+public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private Integer id;
 	private String nome;
-	@Column(unique = true)
 	private String cpf;
 	private String endereco;
 	private Integer cep;
@@ -30,17 +17,14 @@ public class Cliente implements Serializable{
 	private String cidade;
 	private String uf;
 	private String Telefeone;
+	private List<PedidoDTO> listPedidos = new ArrayList<>();
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "cliente")
-	private List<Pedido> listPedidos = new ArrayList<>();
-	
-	public Cliente() {
+	public ClienteDTO() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Cliente(Integer id, String nome, String cpf, String endereco, Integer cep, String bairro, String cidade,
-			String uf, String telefeone) {
+	public ClienteDTO(Integer id, String nome, String cpf, String endereco, Integer cep, String bairro, String cidade,
+			String uf, String telefeone, List<PedidoDTO> listPedidos) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -50,7 +34,8 @@ public class Cliente implements Serializable{
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.uf = uf;
-		Telefeone = telefeone;
+		this.Telefeone = telefeone;
+		this.listPedidos = listPedidos;
 	}
 
 	public Integer getId() {
@@ -125,36 +110,11 @@ public class Cliente implements Serializable{
 		Telefeone = telefeone;
 	}
 
-	public List<Pedido> getListPedidos() {
+	public List<PedidoDTO> getListPedidos() {
 		return listPedidos;
 	}
 
-	public void setListPedidos(List<Pedido> listPedidos) {
+	public void setListPedidos(List<PedidoDTO> listPedidos) {
 		this.listPedidos = listPedidos;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cliente other = (Cliente) obj;
-		if (cpf == null) {
-			if (other.cpf != null)
-				return false;
-		} else if (!cpf.equals(other.cpf))
-			return false;
-		return true;
-	}
+	}	
 }

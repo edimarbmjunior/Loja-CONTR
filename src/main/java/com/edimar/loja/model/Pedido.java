@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.edimar.loja.model.convert.ClienteConvert;
+import com.edimar.loja.model.convert.ItemPedidoConvert;
+import com.edimar.loja.model.dto.PedidoBO;
+import com.edimar.loja.services.Util.DataUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Pedido implements Serializable{
@@ -26,36 +32,45 @@ public class Pedido implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@JsonFormat(pattern = "dd/MM/YYY")
 	private Date dataPedido;
+	
 	private Long numPedido;
-	
-	private Double valorTotalPedido;
-	private Double valorFrete;
-	
-	@JsonManagedReference
+
 	@ManyToOne
 	@JoinColumn(name = "clienteId")
 	private Cliente cliente;
 
 	@OneToMany(mappedBy = "id.pedido")
-	private Set<ItemPedido> itemPedidos = new HashSet<>();
+	private Set<ItemPedido> itensPedidos = new HashSet<>();
 	
 	public Pedido() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Pedido(Integer id, Date dataPedido, Long numPedido, Cliente cliente, Double valorFrete) {
+	public Pedido(Integer id, Date dataPedido, Long numPedido, Cliente cliente) {
 		super();
 		this.id = id;
 		this.dataPedido = dataPedido;
 		this.numPedido = numPedido;
 		this.cliente = cliente;
-		this.valorFrete = valorFrete;
 	}
 	
+	public Pedido(PedidoBO pedidoBO) {
+		super();
+		this.id = pedidoBO.getId();
+		this.dataPedido = DataUtil.converterStringToDate(pedidoBO.getDataPedido());
+		this.numPedido = pedidoBO.getNumPedido();
+		this.cliente = ClienteConvert.converterToClienteFromClienteBO(pedidoBO.getClienteBO());
+		if(pedidoBO.getItemPedidos() != null && (!pedidoBO.getItemPedidos().isEmpty() && pedidoBO.getItemPedidos().size() > 0)) {
+			this.itensPedidos = pedidoBO.getItemPedidos().stream().map(itemPedido -> ItemPedidoConvert.converterToItemPedidoFromItemPedidoBO(itemPedido, pedidoBO.getId())).collect(Collectors.toSet());
+		}
+	}
+	
+	@JsonIgnore
 	public List<Produto> getProduto(){
 		List<Produto> listProdutos = new ArrayList<>();
-		for(ItemPedido item : itemPedidos) {
+		for(ItemPedido item : itensPedidos) {
 			listProdutos.add(item.getProduto());
 		}
 		return listProdutos;
@@ -93,37 +108,12 @@ public class Pedido implements Serializable{
 		this.cliente = cliente;
 	}
 
-	public Double getValorTotalPedido() {
-		System.out.println();
-		System.out.println(" itemPedidos -> " + itemPedidos.isEmpty());
-		System.out.println();
-		this.valorTotalPedido = 0d;
-		if(!itemPedidos.isEmpty()) {
-			for(ItemPedido item : itemPedidos) {
-				this.valorTotalPedido = this.valorTotalPedido + item.getProduto().getPreco();
-			}
-		}
-		return valorTotalPedido;
-	}
-
-	public void setValorTotalPedido(Double valorTotalPedido) {
-		this.valorTotalPedido = valorTotalPedido;
-	}
-
-	public Double getValorFrete() {
-		return valorFrete;
-	}
-
-	public void setValorFrete(Double valorFrete) {
-		this.valorFrete = valorFrete;
-	}
-
 	public Set<ItemPedido> getItemPedidos() {
-		return itemPedidos;
+		return itensPedidos;
 	}
 
-	public void setItemPedidos(Set<ItemPedido> itemPedidos) {
-		this.itemPedidos = itemPedidos;
+	public void setItemPedidos(Set<ItemPedido> itensPedidos) {
+		this.itensPedidos = itensPedidos;
 	}
 	
 	@Override
@@ -153,8 +143,7 @@ public class Pedido implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", numPedido=" + numPedido + ", valorTotalPedido="
-				+ valorTotalPedido + ", valorFrete=" + valorFrete + ", cliente=" + cliente + ", itemPedidos="
-				+ itemPedidos + "]";
+		return "Pedido [id=" + id + ", dataPedido=" + dataPedido + ", numPedido=" + numPedido + ", cliente=" + cliente
+				+ ", itensPedidos=" + itensPedidos + "]";
 	}
 }

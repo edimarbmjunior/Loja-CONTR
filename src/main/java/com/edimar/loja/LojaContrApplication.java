@@ -16,6 +16,7 @@ import com.edimar.loja.services.ClienteService;
 import com.edimar.loja.services.ItemPedidoService;
 import com.edimar.loja.services.PedidoService;
 import com.edimar.loja.services.ProdutoService;
+import com.edimar.loja.services.Util.CalculoFrete;
 
 @SpringBootApplication
 public class LojaContrApplication implements CommandLineRunner {
@@ -42,22 +43,30 @@ public class LojaContrApplication implements CommandLineRunner {
 		Cliente c1 = new Cliente(null, "Juan", "00000000001", "Rua 1", 24750370, "Zona 1", "São Paulo", "SP", "21981494070");
 		Cliente c2 = new Cliente(null, "Juan", "00000000002", "Rua 2", 24750370, "Zona 2", "São Paulo", "SP", "21981494071");
 		clienteService.salvarClientes(Arrays.asList(c1, c2));
+		// c1 = clienteService.buscarClientePorId(1);
+		// c2 = clienteService.buscarClientePorId(2);
 		
 		Produto prd1 = new Produto(null, "Arroz", "Alimento", 29.50);
 		Produto prd2 = new Produto(null, "Feijao", "Alimento", 10.25);
 		produtoService.salvarProdutos(Arrays.asList(prd1, prd2));
+		// prd1 = produtoService.buscarProdutoPorId(1);
+		// prd2 = produtoService.buscarProdutoPorId(2);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 		// sdf.parse("30/12/2020 23:59");
 
-		Pedido ped1 = new Pedido(null, sdf.parse("05/10/2020 13:58"), 1l, c1, 0d);
-		Pedido ped2 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2, 0d);
-		Pedido ped3 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2, 0d);
+		Pedido ped1 = new Pedido(null, sdf.parse("05/10/2020 13:58"), 1l, c1);
+		Pedido ped2 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2);
+		Pedido ped3 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2);
 		pedidoService.salvarPedidos(Arrays.asList(ped1, ped2, ped3));
+		// ped1 = pedidoService.buscarPedidoPorId(1);
+		// ped2 = pedidoService.buscarPedidoPorId(2);
+		// ped3 = pedidoService.buscarPedidoPorId(3);
 		
 		ItemPedido item1 = new ItemPedido(ped1, prd1, 2);
-		item1.getValorTotalItensPedido();
 		ItemPedido item2 = new ItemPedido(ped2, prd2, 5);
-		itemPedidoService.salvarItensPedidos(Arrays.asList(item1, item2));
+		ItemPedido item3 = new ItemPedido(ped3, prd2, 3);
+		itemPedidoService.salvarItensPedidos(Arrays.asList(item1, item2, item3));
+		System.out.println("");
 	}
 }
