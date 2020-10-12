@@ -57,7 +57,7 @@ public enum CalculoFrete {
 	}
 
 	public Double getValorFrete() {
-		return valorFrete;
+		return RecursosUtil.casasDecimais(valorFrete);
 	}
 
 	public String getUf() {

@@ -2,6 +2,8 @@ package com.edimar.loja.model.dto;
 
 import java.io.Serializable;
 
+import com.edimar.loja.services.Util.RecursosUtil;
+
 public class ProdutoBO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -48,7 +50,7 @@ public class ProdutoBO implements Serializable {
 	}
 
 	public Double getPreco() {
-		return preco;
+		return RecursosUtil.casasDecimais(preco);
 	}
 
 	public void setPreco(Double preco) {

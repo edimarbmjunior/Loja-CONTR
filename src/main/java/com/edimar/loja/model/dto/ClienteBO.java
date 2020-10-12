@@ -16,7 +16,7 @@ public class ClienteBO implements Serializable {
 	private String bairro;
 	private String cidade;
 	private String uf;
-	private String Telefeone;
+	private String telefeone;
 	private List<PedidoBO> listPedidos = new ArrayList<>();
 	
 	public ClienteBO() {
@@ -34,7 +34,7 @@ public class ClienteBO implements Serializable {
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.uf = uf;
-		this.Telefeone = telefeone;
+		this.telefeone = telefeone;
 		this.listPedidos = listPedidos;
 	}
 
@@ -103,11 +103,11 @@ public class ClienteBO implements Serializable {
 	}
 
 	public String getTelefeone() {
-		return Telefeone;
+		return this.telefeone;
 	}
 
 	public void setTelefeone(String telefeone) {
-		Telefeone = telefeone;
+		this.telefeone = telefeone;
 	}
 
 	public List<PedidoBO> getListPedidos() {

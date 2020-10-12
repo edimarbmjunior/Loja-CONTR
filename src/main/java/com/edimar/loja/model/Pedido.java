@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
 import com.edimar.loja.model.convert.ClienteConvert;
 import com.edimar.loja.model.convert.ItemPedidoConvert;
 import com.edimar.loja.model.dto.PedidoBO;
-import com.edimar.loja.services.Util.DataUtil;
+import com.edimar.loja.services.Util.RecursosUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -59,7 +59,7 @@ public class Pedido implements Serializable{
 	public Pedido(PedidoBO pedidoBO) {
 		super();
 		this.id = pedidoBO.getId();
-		this.dataPedido = DataUtil.converterStringToDate(pedidoBO.getDataPedido());
+		this.dataPedido = RecursosUtil.converterStringToDate(pedidoBO.getDataPedido());
 		this.numPedido = pedidoBO.getNumPedido();
 		this.cliente = ClienteConvert.converterToClienteFromClienteBO(pedidoBO.getClienteBO());
 		if(pedidoBO.getItemPedidos() != null && (!pedidoBO.getItemPedidos().isEmpty() && pedidoBO.getItemPedidos().size() > 0)) {

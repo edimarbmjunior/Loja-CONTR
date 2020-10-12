@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.edimar.loja.model.Pedido;
 import com.edimar.loja.model.convert.ClienteConvert;
-import com.edimar.loja.services.Util.DataUtil;
+import com.edimar.loja.services.Util.RecursosUtil;
 
 public class PedidoBO implements Serializable{
 
@@ -38,7 +38,7 @@ public class PedidoBO implements Serializable{
 	public PedidoBO(Pedido pedido) {
 		super();
 		this.id = pedido.getId();
-		this.dataPedido = DataUtil.converterDateToString(pedido.getDataPedido());
+		this.dataPedido = RecursosUtil.converterDateToString(pedido.getDataPedido());
 		this.numPedido = pedido.getNumPedido();
 		this.clienteBO = ClienteConvert.converterToClienteBoFromCliente(pedido.getCliente());
 	}
@@ -72,10 +72,12 @@ public class PedidoBO implements Serializable{
 		if(itemPedidos!=null && (!itemPedidos.isEmpty() && itemPedidos.size() > 0)) {
 			this.valorTotalProdutos = 0d;
 			itemPedidos.stream().forEach((itemPedido) -> {
-				this.valorTotalProdutos = itemPedido.getProdutoBO().getPreco()==null? this.valorTotalProdutos : this.valorTotalProdutos + (itemPedido.getProdutoBO().getPreco() * itemPedido.getQtde());
+				if(itemPedido.getProdutoBO().getPreco()!=null) {
+					this.valorTotalProdutos = this.valorTotalProdutos + (itemPedido.getProdutoBO().getPreco() * itemPedido.getQtde());
+				}
 			});
 		}
-		return valorTotalProdutos;
+		return RecursosUtil.casasDecimais(valorTotalProdutos);
 	}
 
 	public void setValorTotalProdutos(Double valorTotalPedido) {
@@ -83,7 +85,7 @@ public class PedidoBO implements Serializable{
 	}
 
 	public Double getValorFrete() {
-		return valorFrete;
+		return RecursosUtil.casasDecimais(valorFrete);
 	}
 
 	public void setValorFrete(Double valorFrete) {

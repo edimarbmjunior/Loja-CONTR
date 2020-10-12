@@ -2,6 +2,8 @@ package com.edimar.loja.model.dto;
 
 import java.io.Serializable;
 
+import com.edimar.loja.services.Util.RecursosUtil;
+
 public class ItemPedidoBO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -36,10 +38,13 @@ public class ItemPedidoBO implements Serializable{
 	}
 
 	public Double getValorTotalItensPedido() {
-		return this.valorTotalItensPedido = produto.getPreco()==null?0d:produto.getPreco() * qtde;
+		if(produto.getPreco()!=null) {
+			this.valorTotalItensPedido = produto.getPreco() * qtde;
+		}
+		return RecursosUtil.casasDecimais(this.valorTotalItensPedido);
 	}
 
 	public void setValorTotalItensPedido(Double valorTotalItensPedido) {
-		this.valorTotalItensPedido = produto.getPreco()==null?0d:produto.getPreco() * qtde;
+		this.valorTotalItensPedido = getValorTotalItensPedido();
 	}
 }

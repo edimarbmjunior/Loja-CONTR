@@ -3,9 +3,7 @@ package com.edimar.loja.model.dto.response;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.edimar.loja.model.Pedido;
-import com.edimar.loja.model.convert.ClienteConvert;
-import com.edimar.loja.services.Util.DataUtil;
+import com.edimar.loja.services.Util.RecursosUtil;
 
 public class PedidoDTO implements Serializable{
 
@@ -66,7 +64,7 @@ public class PedidoDTO implements Serializable{
 				this.valorTotalProdutos = this.valorTotalProdutos + (itemPedido.getProdutoDTO().getPreco() * itemPedido.getQtde());
 			});
 		}
-		return valorTotalProdutos;
+		return RecursosUtil.casasDecimais(valorTotalProdutos);
 	}
 
 	public void setValorTotalProdutos(Double valorTotalPedido) {

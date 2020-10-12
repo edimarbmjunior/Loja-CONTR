@@ -29,6 +29,6 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(GenericExcpetion.class)
 	public ResponseEntity<StandErrors> genericExcpetion(GenericExcpetion e, HttpServletRequest request){
 		StandErrors error = new StandErrors(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
 	}
 }

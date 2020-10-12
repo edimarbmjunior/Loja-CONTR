@@ -94,23 +94,53 @@ public class PedidoService {
 			.stream()
 			.forEach((itemPedido) -> {
 				ItemPedido itemPedidoSalvar = new ItemPedido(pedidoSalvo, ProdutoConvert.converterToProdutoFromProdutoBO(itemPedido.getProdutoBO()), itemPedido.getQtde());
-				itemPedidoService.salvarItemPedido(itemPedidoSalvar);
+				if(itemPedidoSalvar != null && (itemPedidoSalvar.getPedido() != null & itemPedidoSalvar.getPedido() !=null)) {
+					itemPedidoService.salvarItemPedido(itemPedidoSalvar);
+				}
 			});
 		return pedidoSalvo.getId();
 	}
 	
 	public PedidoBO atualizarPedido(PedidoBO pedidoBO) {
 		buscarPedidoPorId(pedidoBO.getId());
+		pedidoBO.setClienteBO(clienteService.buscarClientePorId(pedidoBO.getClienteBO().getId()));
+		pedidoBO.setItemPedidos(pedidoBO
+				.getItemPedidos()
+				.stream()
+				.map(itemPedido -> new ItemPedidoBO(produtoService.buscarProdutoPorId(itemPedido.getProdutoBO().getId()), itemPedido.getQtde()))
+				.collect(Collectors.toSet()));
 		Pedido pedido = PedidoConvert.converterToPedidoFromPedidoBO(pedidoBO);
-		return PedidoConvert.converterToPedidoBoFromPedido(pedidoRepository.save(pedido));
+		final Pedido pedidoSalvo = pedidoRepository.save(pedido);
+		pedidoBO
+			.getItemPedidos()
+			.stream()
+			.forEach((itemPedido) -> {
+				ItemPedido itemPedidoSalvar = new ItemPedido(pedidoSalvo, ProdutoConvert.converterToProdutoFromProdutoBO(itemPedido.getProdutoBO()), itemPedido.getQtde());
+				if(itemPedidoSalvar != null && (itemPedidoSalvar.getPedido() != null & itemPedidoSalvar.getPedido() !=null)) {
+					itemPedidoService.salvarItemPedido(itemPedidoSalvar);
+				}
+			});
+		return PedidoConvert.converterToPedidoBoFromPedido(pedidoSalvo);
 	}
 	
 	public void deletarPedidoPorId(Integer id) {
-		buscarPedidoPorId(id);
+		final PedidoBO pedidoBO = buscarPedidoPorId(id);
+		final Pedido pedidoSalvo = PedidoConvert.converterToPedidoFromPedidoBO(pedidoBO);
 		try {
+			pedidoBO
+				.getItemPedidos()
+				.stream()
+				.forEach((itemPedido) -> {
+					ItemPedido itemPedidoSalvar = new ItemPedido(pedidoSalvo, ProdutoConvert.converterToProdutoFromProdutoBO(itemPedido.getProdutoBO()), itemPedido.getQtde());
+					if(itemPedidoSalvar != null && (itemPedidoSalvar.getPedido() != null & itemPedidoSalvar.getPedido() !=null)) {
+						itemPedidoService.deletarPedido(itemPedidoSalvar);
+					}
+				});
 			pedidoRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new com.edimar.loja.services.exceptions.DataIntegrityViolationException("Não é possíve excluir pedidos que que possuem itens.");
+			throw new com.edimar.loja.services.exceptions.DataIntegrityViolationException("Não é possíve excluir pedidos que possuem itens.");
+		} catch (Exception e) {
+			throw new GenericExcpetion("Erro ao ao tentar excluir -> " + id + " - Motivo: " + e.getMessage());
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package com.edimar.loja.services.Util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,7 +9,7 @@ import java.util.Date;
 
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 
-public class DataUtil {
+public class RecursosUtil {
 	
 	/**
 	 * Metodo para transformar data em string para Date em java
@@ -31,6 +33,12 @@ public class DataUtil {
 	public static String converterDateToString(Date data) {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return dateFormat.format(data);
+	}
+	
+	public static Double casasDecimais(Double numero) {
+		BigDecimal bd = new BigDecimal(Double.toString(numero));
+		bd = bd.setScale(2, RoundingMode.HALF_UP);
+		return bd.doubleValue();
 	}
 
 }

@@ -16,7 +16,6 @@ import com.edimar.loja.services.ClienteService;
 import com.edimar.loja.services.ItemPedidoService;
 import com.edimar.loja.services.PedidoService;
 import com.edimar.loja.services.ProdutoService;
-import com.edimar.loja.services.Util.CalculoFrete;
 
 @SpringBootApplication
 public class LojaContrApplication implements CommandLineRunner {
@@ -48,7 +47,9 @@ public class LojaContrApplication implements CommandLineRunner {
 		
 		Produto prd1 = new Produto(null, "Arroz", "Alimento", 29.50);
 		Produto prd2 = new Produto(null, "Feijao", "Alimento", 10.25);
-		produtoService.salvarProdutos(Arrays.asList(prd1, prd2));
+		Produto prd3 = new Produto(null, "Macarrao", "Alimento", 4.48);
+		Produto prd4 = new Produto(null, "Oleo", "Alimento", 7.71);
+		produtoService.salvarProdutos(Arrays.asList(prd1, prd2, prd3, prd4));
 		// prd1 = produtoService.buscarProdutoPorId(1);
 		// prd2 = produtoService.buscarProdutoPorId(2);
 		
@@ -63,10 +64,12 @@ public class LojaContrApplication implements CommandLineRunner {
 		// ped2 = pedidoService.buscarPedidoPorId(2);
 		// ped3 = pedidoService.buscarPedidoPorId(3);
 		
-		ItemPedido item1 = new ItemPedido(ped1, prd1, 2);
-		ItemPedido item2 = new ItemPedido(ped2, prd2, 5);
-		ItemPedido item3 = new ItemPedido(ped3, prd2, 3);
-		itemPedidoService.salvarItensPedidos(Arrays.asList(item1, item2, item3));
-		System.out.println("");
+		ItemPedido item1 = new ItemPedido(ped1, prd1, 1);
+		ItemPedido item2 = new ItemPedido(ped2, prd2, 3);
+		ItemPedido item3 = new ItemPedido(ped2, prd4, 2);
+		ItemPedido item4 = new ItemPedido(ped3, prd2, 2);
+		ItemPedido item5 = new ItemPedido(ped3, prd3, 5);
+		ItemPedido item6 = new ItemPedido(ped1, prd1, 2);
+		itemPedidoService.salvarItensPedidos(Arrays.asList(item1, item2, item3, item4, item5, item6));
 	}
 }

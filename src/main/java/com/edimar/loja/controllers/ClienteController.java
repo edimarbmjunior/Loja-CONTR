@@ -44,4 +44,21 @@ public class ClienteController {
 				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@RequestMapping(method = RequestMethod.PUT)
+	public ResponseEntity<Void> atualizarPedido(@RequestBody ClienteBO cliente){
+		Integer identificador = clienteService.atualizarCliente(cliente);
+		URI uri = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(identificador)
+				.toUri();
+		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> deletarCliente(@PathVariable Integer id){
+		clienteService.deletarCliente(id);
+		return ResponseEntity.noContent().build();
+	}
 }

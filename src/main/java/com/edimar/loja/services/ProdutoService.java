@@ -14,6 +14,7 @@ import com.edimar.loja.model.Produto;
 import com.edimar.loja.model.convert.ProdutoConvert;
 import com.edimar.loja.model.dto.ProdutoBO;
 import com.edimar.loja.repositories.ProdutoRepository;
+import com.edimar.loja.services.exceptions.GenericExcpetion;
 import com.edimar.loja.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -60,6 +61,8 @@ public class ProdutoService {
 			produtoRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new com.edimar.loja.services.exceptions.DataIntegrityViolationException("Não é possíve excluir produtos que que possuem pedidos");
+		} catch (Exception e) {
+			throw new GenericExcpetion("Erro ao ao tentar excluir -> " + id + " - Motivo: " + e.getMessage());
 		}
 	}
 }

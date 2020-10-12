@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.edimar.loja.services.Util.RecursosUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -70,7 +71,7 @@ public class Produto implements Serializable {
 		this.categoria = categoria;
 	}
 	public Double getPreco() {
-		return preco;
+		return RecursosUtil.casasDecimais(preco);
 	}
 	public void setPreco(Double preco) {
 		this.preco = preco;
