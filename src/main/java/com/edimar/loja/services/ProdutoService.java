@@ -14,6 +14,7 @@ import com.edimar.loja.model.Produto;
 import com.edimar.loja.model.convert.ProdutoConvert;
 import com.edimar.loja.model.dto.ProdutoBO;
 import com.edimar.loja.repositories.ProdutoRepository;
+import com.edimar.loja.service.validator.ValidacaoProduto;
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 import com.edimar.loja.services.exceptions.ObjectNotFoundException;
 
@@ -26,12 +27,14 @@ public class ProdutoService {
 	private ProdutoRepository produtoRepository;
 	
 	public List<ProdutoBO> litarProdutos(){
+		logger.info("BUSCANDO DOS PRODUTOS");
 		List<Produto> produtos = produtoRepository.findAll();
 		List<ProdutoBO> produtosBO = produtos.stream().map(produto -> ProdutoConvert.converterToProdutoBOFromProduto(produto)).collect(Collectors.toList());
 		return produtosBO.isEmpty() ? Arrays.asList() : produtosBO;
 	}
 
 	public ProdutoBO buscarProdutoPorId(Integer id) {
+		ValidacaoProduto.validacaoConsultar(id);
 		Produto produto = produtoRepository
 				.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado! ID: " + id +"."));
@@ -43,19 +46,22 @@ public class ProdutoService {
 		produtoRepository.saveAll(produtos);
 	}
 	
-	public Produto salvarProduto(ProdutoBO produtoBO) {
+	public ProdutoBO salvarProduto(ProdutoBO produtoBO) {
+		ValidacaoProduto.validacaoIncluirProduto(produtoBO);
 		Produto produto = ProdutoConvert.converterToProdutoFromProdutoBO(produtoBO);
 		produto.setId(null);
-		return produtoRepository.save(produto);
+		return ProdutoConvert.converterToProdutoBOFromProduto(produtoRepository.save(produto));
 	}
 	
-	public Produto atualizarProduto(ProdutoBO produtoBO) {
+	public ProdutoBO atualizarProduto(ProdutoBO produtoBO) {
+		ValidacaoProduto.validacaoAtualziarProduto(produtoBO);
 		buscarProdutoPorId(produtoBO.getId());
 		Produto produto = ProdutoConvert.converterToProdutoFromProdutoBO(produtoBO);
-		return produtoRepository.save(produto);
+		return ProdutoConvert.converterToProdutoBOFromProduto(produtoRepository.save(produto));
 	}
 	
 	public void deletarProdutoPorId(Integer id) {
+		ValidacaoProduto.validacaoConsultar(id);
 		buscarProdutoPorId(id);
 		try {
 			produtoRepository.deleteById(id);

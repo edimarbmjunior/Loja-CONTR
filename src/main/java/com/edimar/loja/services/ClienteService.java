@@ -35,6 +35,14 @@ public class ClienteService {
 		return retorno;
 	}
 	
+	public ClienteBO buscarClientePorCpf(String cpf) {
+		ValidacaoCliente.validacaoConsultarCpf(cpf);
+		Cliente cliente = clienteRepository
+				.buscarPorCpf(cpf);
+		ClienteBO retorno = ClienteConvert.converterToClienteBoFromCliente(cliente);
+		return retorno;
+	}
+	
 	public List<ClienteBO> litarClientes(){
 		List<Cliente> clientes = clienteRepository.findAll();
 		List<ClienteBO> retorno = clientes.stream().map(cliente -> ClienteConvert.converterToClienteBoFromCliente(cliente)).collect(Collectors.toList());
@@ -64,6 +72,7 @@ public class ClienteService {
 	}
 	
 	public void deletarCliente(Integer identificador) {
+		ValidacaoCliente.validacaoConsultar(identificador);
 		ClienteBO cliente = buscarClientePorId(identificador);
 		try {
 			clienteRepository.deleteById(cliente.getId());

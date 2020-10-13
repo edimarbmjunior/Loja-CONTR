@@ -10,15 +10,22 @@ public class ValidacaoCliente {
 		isIdentificadorValido(id);
 	}
 	
+	public static void validacaoConsultarCpf(String cpf) {
+		validaCPF(cpf);
+	}
+	
 	public static void validacaoAtualizar(ClienteBO clienteBO) {
-		isIdentificadorValido(clienteBO.getId());
+		campoObrigatorio(isNULL(clienteBO.getNome()), "nome");
 		validacaoNome(clienteBO.getNome());
+		campoObrigatorio(isNULL(clienteBO.getCpf()), "cpf");
 		validaCPF(clienteBO.getCpf());
 		validaEndereco(clienteBO.getEndereco());
+		campoObrigatorio(isNULL(clienteBO.getCep()), "CEP");
 		validaCep(clienteBO.getCep());
 		validaUF(clienteBO.getUf());
 		validaBairro(clienteBO.getBairro());
 		validaCidade(clienteBO.getCidade());
+		campoObrigatorio(isNULL(clienteBO.getTelefeone()), "telefone");
 		validaTelefeone(clienteBO.getTelefeone());
 	}
 	
@@ -86,19 +93,14 @@ public class ValidacaoCliente {
 		}
 	}
 	
-	private static boolean isInteiro(String s) {
-		// cria um array de char
-		char[] c = s.toCharArray();
-		boolean d = true;
-
-		for ( int i = 0; i < c.length; i++ ) {
-		    // verifica se o char não é um dígito
-		    if ( !Character.isDigit( c[ i ] ) ) {
-		        d = false;
-		        break;
-		    }
+	private static Boolean isNULL(Object obj) {
+		if(obj==null) {
+			return true;
 		}
-
-		return d;
+		return false;
+	}
+	
+	private static void campoObrigatorio(Boolean fazCritica, String nomeCampo) {
+		if(fazCritica) throw new GenericExcpetion("Campo " + nomeCampo + " é obrigatório");
 	}
 }

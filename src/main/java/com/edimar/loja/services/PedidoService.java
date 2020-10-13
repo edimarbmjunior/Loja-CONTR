@@ -18,6 +18,7 @@ import com.edimar.loja.model.convert.ProdutoConvert;
 import com.edimar.loja.model.dto.ItemPedidoBO;
 import com.edimar.loja.model.dto.PedidoBO;
 import com.edimar.loja.repositories.PedidoRepository;
+import com.edimar.loja.service.validator.ValidacaoPedido;
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 import com.edimar.loja.services.exceptions.ObjectNotFoundException;
 
@@ -39,6 +40,7 @@ public class PedidoService {
 	private ItemPedidoService itemPedidoService;
 
 	public PedidoBO buscarPedidoPorId(Integer id) {
+		ValidacaoPedido.validacaoConsultar(id);
 		Pedido p = pedidoRepository
 				.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado! ID: " + id +"."));
@@ -56,28 +58,23 @@ public class PedidoService {
 		pedidoRepository.saveAll(pedidos);
 	}
 	
-	public Pedido salvarPedido(Pedido pedido) {
+	private Pedido salvarPedido(Pedido pedido) {
 		pedido.setId(null);
 		return pedidoRepository.save(pedido);
 	}
 
 	public Integer incluirPedidoSemProduto(PedidoBO pedidoBO) {
-		if(pedidoBO.getItemPedidos() != null && (!pedidoBO.getItemPedidos().isEmpty() && pedidoBO.getItemPedidos().size() > 0)) {
-			throw new GenericExcpetion("Não pode ser enviado dados de pedidos");
-		}
-		long ultimNumPedido = pedidoRepository.ultimoNumPedido().getNumPedido() + 1l;
-		Pedido pedido = new Pedido();
+		ValidacaoPedido.validacaoIncluirSemProduto(pedidoBO);
+		long ultimNumPedido = pedidoRepository.ultimoNumPedido().getNumPedido() + 2l;
 		pedidoBO.setNumPedido(ultimNumPedido);
 		pedidoBO.setClienteBO(clienteService.buscarClientePorId(pedidoBO.getClienteBO().getId()));
 		pedidoBO.setItemPedidos(new HashSet<>());
-		pedido = PedidoConvert.converterToPedidoFromPedidoBO(pedidoBO);
+		Pedido pedido = PedidoConvert.converterToPedidoFromPedidoBO(pedidoBO);
 		return salvarPedido(pedido).getId();
 	}
 	
 	public Integer incluirPedidoComProduto(PedidoBO pedidoBO) {
-		if(pedidoBO.getItemPedidos() == null || (pedidoBO.getItemPedidos().isEmpty() || pedidoBO.getItemPedidos().size() == 0)) {
-			throw new GenericExcpetion("Não pode ser enviado dados de pedidos");
-		}
+		ValidacaoPedido.validacaoIncluirComProduto(pedidoBO);
 		long ultimNumPedido = pedidoRepository.ultimoNumPedido().getNumPedido() + 1l;
 		Pedido pedido = new Pedido();
 		pedidoBO.setNumPedido(ultimNumPedido);
@@ -102,6 +99,7 @@ public class PedidoService {
 	}
 	
 	public PedidoBO atualizarPedido(PedidoBO pedidoBO) {
+		ValidacaoPedido.validacaoAtualziar(pedidoBO);
 		buscarPedidoPorId(pedidoBO.getId());
 		pedidoBO.setClienteBO(clienteService.buscarClientePorId(pedidoBO.getClienteBO().getId()));
 		pedidoBO.setItemPedidos(pedidoBO
@@ -124,6 +122,7 @@ public class PedidoService {
 	}
 	
 	public void deletarPedidoPorId(Integer id) {
+		ValidacaoPedido.validacaoConsultar(id);
 		final PedidoBO pedidoBO = buscarPedidoPorId(id);
 		final Pedido pedidoSalvo = PedidoConvert.converterToPedidoFromPedidoBO(pedidoBO);
 		try {

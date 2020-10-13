@@ -17,6 +17,7 @@ import com.edimar.loja.model.convert.ProdutoConvert;
 import com.edimar.loja.model.dto.ItemPedidoBO;
 import com.edimar.loja.model.dto.PedidoBO;
 import com.edimar.loja.repositories.ItemPedidoRepository;
+import com.edimar.loja.service.validator.ValidacaoItemPedido;
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 
 @Service
@@ -34,6 +35,7 @@ public class ItemPedidoService {
 	private ProdutoService produtoService;
 
 	public ItemPedidoBO buscarItemPedido(Integer idNumpedido, Integer idProduto) {
+		ValidacaoItemPedido.validacaoConsultar(idNumpedido, idProduto);
 		try {
 			ItemPedido itemPedido = itemPedidoRepository.itemPedidoIdentificador(idNumpedido, idProduto);
 			ItemPedidoBO itemPedidoBO = ItemPedidoConvert.converterToItemPedidoBoFromItemPedido(itemPedido);
@@ -52,9 +54,7 @@ public class ItemPedidoService {
 	}
 	
 	public Integer incluirItemPedido(PedidoBO pedidoBO) {
-		if(pedidoBO.getItemPedidos() == null || (pedidoBO.getItemPedidos().isEmpty() || pedidoBO.getItemPedidos().size() == 0)) {
-			throw new GenericExcpetion("Não foram enviado dados de itens de pedidos");
-		}
+		ValidacaoItemPedido.validacaoAtualizar(pedidoBO);
 		final PedidoBO pedidoSalvoBO = pedidoService.buscarPedidoPorId(pedidoBO.getId());
 		pedidoBO.setItemPedidos(pedidoBO
 				.getItemPedidos()
@@ -75,9 +75,7 @@ public class ItemPedidoService {
 	}
 	
 	public PedidoBO atualizarItemPedido(PedidoBO pedidoBO) {
-		if(pedidoBO.getItemPedidos() == null || (pedidoBO.getItemPedidos().isEmpty() || pedidoBO.getItemPedidos().size() == 0)) {
-			throw new GenericExcpetion("Não foram enviado dados de itens de pedidos");
-		}
+		ValidacaoItemPedido.validacaoAtualizar(pedidoBO);
 		final PedidoBO pedidoSalvoBO = pedidoService.buscarPedidoPorId(pedidoBO.getId());
 		pedidoBO.setItemPedidos(pedidoBO
 				.getItemPedidos()
@@ -98,6 +96,7 @@ public class ItemPedidoService {
 	}
 	
 	public void deletarItemPedidoPorId(final Integer idNumpedido, Integer idProduto) {
+		ValidacaoItemPedido.validacaoConsultar(idNumpedido, idProduto);
 		final PedidoBO pedidoBO = pedidoService.buscarPedidoPorId(idNumpedido);
 		pedidoBO.setItemPedidos(pedidoBO
 				.getItemPedidos()
@@ -126,6 +125,7 @@ public class ItemPedidoService {
 	}
 	
 	public void deletarPedido(ItemPedido itemPedido) {
+		buscarItemPedido(itemPedido.getId().getPedido().getId(), itemPedido.getId().getProduto().getId());
 		try {
 			itemPedidoRepository.delete(itemPedido);
 		} catch (DataIntegrityViolationException e) {

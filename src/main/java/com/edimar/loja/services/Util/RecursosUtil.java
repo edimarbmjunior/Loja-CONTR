@@ -33,6 +33,7 @@ public class RecursosUtil {
 	public static String converterDateToString(Date data) {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return dateFormat.format(data);
+		
 	}
 	
 	public static Double casasDecimais(Double numero) {
