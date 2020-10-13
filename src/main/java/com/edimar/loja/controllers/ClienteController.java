@@ -42,6 +42,13 @@ public class ClienteController {
 		return ResponseEntity.ok().body(c);
 	}
 	
+	@RequestMapping(value="/calculafrete/{cep}", method = RequestMethod.GET)
+	@ApiOperation(value = "Busca valor do frete pelo CEP")
+	public ResponseEntity<?> buscarValorCep(@PathVariable Integer cep) throws Exception {
+		Double c = clienteService.buscarValorFrete(cep);
+		return ResponseEntity.ok().body(c);
+	}
+	
 	@RequestMapping(value="/todos", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca clientes")
 	public ResponseEntity<List<ClienteBO>> litarClientes() {

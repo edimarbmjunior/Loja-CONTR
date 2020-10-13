@@ -27,7 +27,6 @@ public class ProdutoService {
 	private ProdutoRepository produtoRepository;
 	
 	public List<ProdutoBO> litarProdutos(){
-		logger.info("BUSCANDO DOS PRODUTOS");
 		List<Produto> produtos = produtoRepository.findAll();
 		List<ProdutoBO> produtosBO = produtos.stream().map(produto -> ProdutoConvert.converterToProdutoBOFromProduto(produto)).collect(Collectors.toList());
 		return produtosBO.isEmpty() ? Arrays.asList() : produtosBO;

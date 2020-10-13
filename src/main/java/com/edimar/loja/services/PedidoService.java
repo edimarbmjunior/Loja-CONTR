@@ -16,9 +16,11 @@ import com.edimar.loja.model.Pedido;
 import com.edimar.loja.model.convert.PedidoConvert;
 import com.edimar.loja.model.convert.ProdutoConvert;
 import com.edimar.loja.model.dto.ItemPedidoBO;
+import com.edimar.loja.model.dto.NotaFiscalBO;
 import com.edimar.loja.model.dto.PedidoBO;
 import com.edimar.loja.repositories.PedidoRepository;
 import com.edimar.loja.service.validator.ValidacaoPedido;
+import com.edimar.loja.services.Util.CalculoFrete;
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 import com.edimar.loja.services.exceptions.ObjectNotFoundException;
 
@@ -46,6 +48,31 @@ public class PedidoService {
 				.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado! ID: " + id +"."));
 		PedidoBO retorno = PedidoConvert.converterToPedidoBoFromPedido(p);
 		return retorno;
+	}
+	
+	public PedidoBO buscarPedidoPorNumPedido(Long numPedido) {
+		ValidacaoPedido.validacaoConsultarNumPedido(numPedido);
+		Integer identificador = pedidoRepository
+				.recuperaPeloNumPedido(numPedido);
+		PedidoBO retorno = buscarPedidoPorId(identificador);
+		return retorno;
+	}
+	
+	public NotaFiscalBO montaNotaFiscal(Long numPedido) {
+		NotaFiscalBO notaFiscalBO = new NotaFiscalBO();
+		PedidoBO pedidoBO = buscarPedidoPorNumPedido(numPedido);
+		notaFiscalBO.setCpfCliente(pedidoBO.getClienteBO().getCpf());
+		notaFiscalBO.setCepCliente(pedidoBO.getClienteBO().getCep());
+		notaFiscalBO.setFretePedido(pedidoBO.getValorFrete());
+		notaFiscalBO.setItensPedidos(pedidoBO.getItemPedidos());
+		notaFiscalBO.setNomeCliente(pedidoBO.getClienteBO().getNome());
+		
+		CalculoFrete calculo = CalculoFrete.verificarCepDados(pedidoBO.getClienteBO().getCep());
+		
+		notaFiscalBO.setNomeEstadoCliente(calculo.getEstado());
+		notaFiscalBO.setNumPedido(pedidoBO.getNumPedido());
+		notaFiscalBO.setUfCliente(calculo.getUf());
+		return notaFiscalBO;
 	}
 	
 	public List<PedidoBO> litarPedidos(){

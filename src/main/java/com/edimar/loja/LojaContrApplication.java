@@ -58,7 +58,7 @@ public class LojaContrApplication implements CommandLineRunner {
 
 		Pedido ped1 = new Pedido(null, sdf.parse("05/10/2020 13:58"), 1l, c1);
 		Pedido ped2 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2);
-		Pedido ped3 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 2l, c2);
+		Pedido ped3 = new Pedido(null, sdf.parse("05/10/2020 15:09"), 3l, c2);
 		pedidoService.salvarPedidos(Arrays.asList(ped1, ped2, ped3));
 		// ped1 = pedidoService.buscarPedidoPorId(1);
 		// ped2 = pedidoService.buscarPedidoPorId(2);

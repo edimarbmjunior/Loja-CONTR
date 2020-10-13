@@ -9,6 +9,10 @@ public class ValidacaoPedido {
 		isIdentificadorValido(id);
 	}
 	
+	public static void validacaoConsultarNumPedido(Long id) {
+		isNumPedidoValido(id);
+	}
+	
 	public static void validacaoIncluirSemProduto(PedidoBO pedidoBO) {
 		campoObrigatorio(isNULL(pedidoBO.getDataPedido()), "dataPedido");
 		validacaoDataPedido(pedidoBO.getDataPedido());
@@ -44,6 +48,13 @@ public class ValidacaoPedido {
 		if(null==id
 				|| id <= 0) {
 			throw new GenericExcpetion("Identificador enviado é inválido!");
+		}
+	}
+	
+	private static void isNumPedidoValido(Long numPedido) {
+		if(null==numPedido
+				|| numPedido <= 0) {
+			throw new GenericExcpetion("Número pedido enviado é inválido!");
 		}
 	}
 	

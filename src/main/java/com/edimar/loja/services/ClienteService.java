@@ -15,6 +15,7 @@ import com.edimar.loja.model.convert.ClienteConvert;
 import com.edimar.loja.model.dto.ClienteBO;
 import com.edimar.loja.repositories.ClienteRepository;
 import com.edimar.loja.service.validator.ValidacaoCliente;
+import com.edimar.loja.services.Util.CalculoFrete;
 import com.edimar.loja.services.exceptions.GenericExcpetion;
 import com.edimar.loja.services.exceptions.ObjectNotFoundException;
 
@@ -41,6 +42,14 @@ public class ClienteService {
 				.buscarPorCpf(cpf);
 		ClienteBO retorno = ClienteConvert.converterToClienteBoFromCliente(cliente);
 		return retorno;
+	}
+	
+	public Double buscarValorFrete(Integer cep) {
+		CalculoFrete frete = CalculoFrete.verificarCepDados(cep);
+		if(frete==null) {
+			throw new ObjectNotFoundException("CEP é inválido para o calculo!");
+		}
+		return frete.getValorFrete();
 	}
 	
 	public List<ClienteBO> litarClientes(){
