@@ -23,6 +23,17 @@ Executar o método principal na classe com.edimar.loja.LojaContrApplication.java
 
 ## Executando os testes - POSTMAN
 
-
+O arquivo com os endpoints testados está nas pasta "postman" na raqiz do projeto, com o nome de "***postman_collection.json***"
 
 ## Executando os testes - Unitários
+
+### MAVEN
+
+Para executar os testes e compilar o projeto deve executar o comando "***mvn test***"
+
+### IDE STS
+
+Executar as classes “ClienteControllerTest.java”, “ItemPedidoControllerTest.java”, “PedidoControllerTest.java” e “ProdutoControllerTest.java”.
+
+## Copyright
+Released under the Apache License 2.0.
