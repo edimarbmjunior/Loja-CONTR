@@ -1,4 +1,4 @@
-# app1contadorpessoas
+# Loja-SpringBoot
 
 ## Requirementos
 
