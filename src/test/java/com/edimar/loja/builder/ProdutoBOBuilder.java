@@ -1,14 +1,16 @@
 package com.edimar.loja.builder;
 
+import com.edimar.loja.model.Produto;
 import com.edimar.loja.model.dto.ProdutoBO;
 
 public class ProdutoBOBuilder {
 
 	private ProdutoBO produtoBO;
+	private Produto produto;
 	
 	private ProdutoBOBuilder() {}
 	
-	public static ProdutoBOBuilder montaEntityTipo1() {
+	public static ProdutoBOBuilder montaEntityProdutoBOTipo1() {
 		ProdutoBOBuilder dto = new ProdutoBOBuilder();
 		dto.produtoBO = new ProdutoBO();
 		dto.produtoBO.setId(1);
@@ -18,7 +20,17 @@ public class ProdutoBOBuilder {
 		return dto;
 	}
 	
-	public static ProdutoBOBuilder montaEntityTipo2() {
+	public static ProdutoBOBuilder montaEntityProdutoTipo1() {
+		ProdutoBOBuilder dto = new ProdutoBOBuilder();
+		dto.produto = new Produto();
+		dto.produto.setId(1);
+		dto.produto.setCategoria("Alimento");;
+		dto.produto.setDescricao("Arroz");
+		dto.produto.setPreco(29.50d);
+		return dto;
+	}
+	
+	public static ProdutoBOBuilder montaEntityProdutoBOTipo2() {
 		ProdutoBOBuilder dto = new ProdutoBOBuilder();
 		dto.produtoBO = new ProdutoBO();
 		dto.produtoBO.setId(2);
@@ -30,5 +42,9 @@ public class ProdutoBOBuilder {
 	
 	public ProdutoBO retornoEntityProdutoBO() {
 		return produtoBO;
+	}
+	
+	public Produto retornoEntityProduto() {
+		return produto;
 	}
 }

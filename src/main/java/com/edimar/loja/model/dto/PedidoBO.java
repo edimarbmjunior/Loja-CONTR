@@ -76,8 +76,9 @@ public class PedidoBO implements Serializable{
 					this.valorTotalProdutos = this.valorTotalProdutos + (itemPedido.getProdutoBO().getPreco() * itemPedido.getQtde());
 				}
 			});
+			return RecursosUtil.casasDecimais(valorTotalProdutos);
 		}
-		return RecursosUtil.casasDecimais(valorTotalProdutos);
+		return this.valorTotalProdutos;
 	}
 
 	public void setValorTotalProdutos(Double valorTotalPedido) {
@@ -85,7 +86,10 @@ public class PedidoBO implements Serializable{
 	}
 
 	public Double getValorFrete() {
-		return RecursosUtil.casasDecimais(valorFrete);
+		if(this.valorFrete==null) {
+			return null;
+		}
+		return RecursosUtil.casasDecimais(this.valorFrete);
 	}
 
 	public void setValorFrete(Double valorFrete) {

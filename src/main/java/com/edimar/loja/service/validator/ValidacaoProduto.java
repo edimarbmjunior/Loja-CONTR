@@ -34,13 +34,13 @@ public class ValidacaoProduto {
 	}
 	
 	private static void validacaoDescricao(String descricao) {
-		if(descricao != null && descricao.length() <= 5) {
-			throw new GenericExcpetion("Descrição é inválido. Quantidade mínima de carateres é 6!");
+		if(descricao != null && descricao.length() < 5) {
+			throw new GenericExcpetion("Descrição é inválido. Quantidade mínima de carateres é 5!");
 		}
 	}
 	
 	private static void validaPreco(Double preco) {
-		if(preco >= 0) {
+		if(preco <= Double.valueOf("0")) {
 			throw new GenericExcpetion("Preço é inválido. Valor deve ser maior que zero!");
 		}
 	}

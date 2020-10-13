@@ -19,6 +19,7 @@ import com.edimar.loja.services.ProdutoService;
 
 @SpringBootApplication
 public class LojaContrApplication implements CommandLineRunner {
+// public class LojaContrApplication{
 	
 	@Autowired
 	private ClienteService clienteService;
@@ -39,8 +40,8 @@ public class LojaContrApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		//Para incluir automaticamente logo após instanciar
-		Cliente c1 = new Cliente(null, "Juan", "00000000001", "Rua 1", 24750370, "Zona 1", "São Paulo", "SP", "21981494070");
-		Cliente c2 = new Cliente(null, "Juan", "00000000002", "Rua 2", 24750370, "Zona 2", "São Paulo", "SP", "21981494071");
+		Cliente c1 = new Cliente(null, "Juan", "95481086077", "Rua 1", 24750370, "Zona 1", "São Paulo", "SP", "21981494070");
+		Cliente c2 = new Cliente(null, "Michael", "84978743079", "Rua 2", 24750370, "Zona 2", "São Paulo", "SP", "21981494071");
 		clienteService.salvarClientes(Arrays.asList(c1, c2));
 		// c1 = clienteService.buscarClientePorId(1);
 		// c2 = clienteService.buscarClientePorId(2);
@@ -71,5 +72,6 @@ public class LojaContrApplication implements CommandLineRunner {
 		ItemPedido item5 = new ItemPedido(ped3, prd3, 5);
 		ItemPedido item6 = new ItemPedido(ped1, prd1, 2);
 		itemPedidoService.salvarItensPedidos(Arrays.asList(item1, item2, item3, item4, item5, item6));
+		System.out.println("Fim das inclusões!");
 	}
 }

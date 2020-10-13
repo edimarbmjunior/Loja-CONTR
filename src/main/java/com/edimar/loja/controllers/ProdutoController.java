@@ -18,6 +18,8 @@ import com.edimar.loja.services.ProdutoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @CrossOrigin
@@ -30,6 +32,11 @@ public class ProdutoController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca produto pelo codigo")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<ProdutoBO> buscarProdutoPorId(@PathVariable Integer id) {
 		ProdutoBO produto = produtoService.buscarProdutoPorId(id);
 		return ResponseEntity.ok().body(produto);
@@ -37,6 +44,11 @@ public class ProdutoController {
 	
 	@RequestMapping(value="/todos", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca lista de produtos existentes")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<List<ProdutoBO>> buscarProdutos() {
 		List<ProdutoBO> produtos = produtoService.litarProdutos();
 		return ResponseEntity.ok().body(produtos);
@@ -44,6 +56,10 @@ public class ProdutoController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ApiOperation(value = "Incuir produto na base de dados")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Inclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> salvarProduto(@RequestBody ProdutoBO produtoBO){
 		ProdutoBO retorno = produtoService.salvarProduto(produtoBO);
 		URI uri = ServletUriComponentsBuilder
@@ -56,6 +72,10 @@ public class ProdutoController {
 	
 	@RequestMapping(method = RequestMethod.PUT)
 	@ApiOperation(value = "Atualizar produto pela base de dados")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Atualização realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> atualizarProduto(@RequestBody ProdutoBO produto){
 		produtoService.atualizarProduto(produto);
 		return ResponseEntity.noContent().build();
@@ -63,6 +83,10 @@ public class ProdutoController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	@ApiOperation(value = "Apaga produto pelo identificador")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Deleção realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> deletarProdutoPorId(@PathVariable Integer id) {
 		produtoService.deletarProdutoPorId(id);
 		return ResponseEntity.noContent().build();

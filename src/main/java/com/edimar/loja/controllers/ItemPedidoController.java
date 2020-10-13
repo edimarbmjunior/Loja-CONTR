@@ -15,6 +15,8 @@ import com.edimar.loja.services.ItemPedidoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @CrossOrigin
@@ -27,6 +29,11 @@ public class ItemPedidoController {
 
 	@RequestMapping(value="/{idNumpedido}/{idProduto}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca pelo item pedido, passando identificador do pedido e identificador do produto")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<?> buscarPedidoPorId(@PathVariable Integer idNumpedido, @PathVariable Integer idProduto) throws Exception {
 		ItemPedidoBO itemPedidoBO = itemPedidoService.buscarItemPedido(idNumpedido, idProduto);
 		return ResponseEntity.ok().body(itemPedidoBO);
@@ -34,6 +41,10 @@ public class ItemPedidoController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	@ApiOperation(value = "Inclui um item pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Inclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> salvarPedidoComProduto(@RequestBody PedidoBO pedido){
 		itemPedidoService.incluirItemPedido(pedido);
 		return ResponseEntity.noContent().build();
@@ -41,6 +52,10 @@ public class ItemPedidoController {
 	
 	@RequestMapping(method = RequestMethod.PUT)
 	@ApiOperation(value = "Atualiza um item pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Inclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> atualizarPedido(@RequestBody PedidoBO pedido){
 		pedido = itemPedidoService.atualizarItemPedido(pedido);
 		return ResponseEntity.noContent().build();
@@ -48,6 +63,10 @@ public class ItemPedidoController {
 	
 	@RequestMapping(value="/{idNumpedido}/{idProduto}", method = RequestMethod.DELETE)
 	@ApiOperation(value = "Deleta um item pedido, passando identificador do pedido e identificador do produto")
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Exclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> deletarPedidoPorId(@PathVariable Integer idNumpedido, @PathVariable Integer idProduto) {
 		itemPedidoService.deletarItemPedidoPorId(idNumpedido, idProduto);
 		return ResponseEntity.noContent().build();

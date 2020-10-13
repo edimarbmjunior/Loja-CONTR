@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.edimar.loja.model.Cliente;
 import com.edimar.loja.model.convert.ClienteConvert;
 import com.edimar.loja.model.dto.ClienteBO;
+import com.edimar.loja.model.dto.ValorFreteBO;
 import com.edimar.loja.repositories.ClienteRepository;
 import com.edimar.loja.service.validator.ValidacaoCliente;
 import com.edimar.loja.services.Util.CalculoFrete;
@@ -36,20 +37,34 @@ public class ClienteService {
 		return retorno;
 	}
 	
-	public ClienteBO buscarClientePorCpf(String cpf) {
+	public ClienteBO buscarClientePorCpf(String cpf, Integer tipoPesquisa) {
 		ValidacaoCliente.validacaoConsultarCpf(cpf);
 		Cliente cliente = clienteRepository
 				.buscarPorCpf(cpf);
-		ClienteBO retorno = ClienteConvert.converterToClienteBoFromCliente(cliente);
-		return retorno;
+		if("2".equals(tipoPesquisa.toString().trim())) {
+			if(cliente == null) {
+				return new ClienteBO();
+			}else {
+				ClienteBO retorno = ClienteConvert.converterToClienteBoFromCliente(cliente);
+				return retorno;
+			}
+		}else {
+			if(cliente == null) {
+				throw new ObjectNotFoundException("Cliente não encontrado! CPF: " + cpf +".");
+			}else {
+				ClienteBO retorno = ClienteConvert.converterToClienteBoFromCliente(cliente);
+				return retorno;
+			}
+		}
 	}
 	
-	public Double buscarValorFrete(Integer cep) {
+	public ValorFreteBO buscarValorFrete(Integer cep) {
 		CalculoFrete frete = CalculoFrete.verificarCepDados(cep);
 		if(frete==null) {
 			throw new ObjectNotFoundException("CEP é inválido para o calculo!");
 		}
-		return frete.getValorFrete();
+		ValorFreteBO valorFrete = new ValorFreteBO(frete.getValorFrete());
+		return valorFrete;
 	}
 	
 	public List<ClienteBO> litarClientes(){
@@ -68,6 +83,11 @@ public class ClienteService {
 	}
 	
 	public Integer incluirCliente(ClienteBO clienteBO) {
+		ValidacaoCliente.validacaoAtualizar(clienteBO);
+		ClienteBO clientePesquisa = buscarClientePorCpf(clienteBO.getCpf(), 2);
+		if(clientePesquisa.getCpf() != null) {
+			throw new GenericExcpetion("CPF é inválido!");
+		}
 		Cliente cliente = ClienteConvert.converterToClienteFromClienteBO(clienteBO);
 		return salvarCliente(cliente).getId();
 	}

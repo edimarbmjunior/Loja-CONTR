@@ -27,7 +27,6 @@ public class ValidacaoPedido {
 		campoObrigatorio(isNULL(pedidoBO.getDataPedido()), "dataPedido");
 		validacaoDataPedido(pedidoBO.getDataPedido());
 		campoNaoPodeAlterar(!isNULL(pedidoBO.getNumPedido()), "número pedido");
-		campoNaoPodeAlterar(!isNULL(pedidoBO.getValorTotalProdutos()), "valor total do pedido");
 		campoNaoPodeAlterar(!isNULL(pedidoBO.getValorFrete()), "valor do frete");
 		campoObrigatorio(isNULL(pedidoBO.getClienteBO().getId()), "identificador do cliente");
 		validaItemPedidoObrigatorio(pedidoBO);
@@ -38,7 +37,6 @@ public class ValidacaoPedido {
 		campoObrigatorio(isNULL(pedidoBO.getDataPedido()), "dataPedido");
 		validacaoDataPedido(pedidoBO.getDataPedido());
 		campoNaoPodeAlterar(!isNULL(pedidoBO.getNumPedido()), "número pedido");
-		campoNaoPodeAlterar(!isNULL(pedidoBO.getValorTotalProdutos()), "valor total do pedido");
 		campoNaoPodeAlterar(!isNULL(pedidoBO.getValorFrete()), "valor do frete");
 		campoObrigatorio(isNULL(pedidoBO.getClienteBO().getId()), "identificador do cliente");
 		validaItemPedidoObrigatorio(pedidoBO);

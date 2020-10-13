@@ -39,6 +39,7 @@ public class ClienteConvert {
 	
 	public static Cliente converterToClienteFromClienteBO(ClienteBO clienteBO) {
 		Cliente cliente = new Cliente();
+		cliente.setId(clienteBO.getId());
 		cliente.setBairro(clienteBO.getBairro());
 		cliente.setCep(clienteBO.getCep());
 		cliente.setCidade(clienteBO.getCidade());

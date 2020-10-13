@@ -38,8 +38,11 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     private ApiInfo apiInfo() {
 
         return new ApiInfoBuilder()
-                .title("SPRING REST API")
+                .title("LOJA - SPRING REST API")
                 .description("Documentação das APIs REST")
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+                .version("1.0.0")
                 .contact(new Contact("Edimar", null, "edimarbmjunior@gmail.com"))
                 .build();
     }

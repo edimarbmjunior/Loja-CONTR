@@ -19,6 +19,8 @@ import com.edimar.loja.services.PedidoService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @RestController
 @CrossOrigin
@@ -31,6 +33,11 @@ public class PedidoController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca pedido pelo codigo")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<?> buscarPedidoPorId(@PathVariable Integer id) {
 		PedidoBO p = pedidoService.buscarPedidoPorId(id);
 		return ResponseEntity.ok().body(p);
@@ -38,6 +45,11 @@ public class PedidoController {
 	
 	@RequestMapping(value="/numpedido/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca pedido pelo numPedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<?> buscarPedidoPorNumPedido(@PathVariable Long id) {
 		PedidoBO p = pedidoService.buscarPedidoPorNumPedido(id);
 		return ResponseEntity.ok().body(p);
@@ -45,6 +57,11 @@ public class PedidoController {
 	
 	@RequestMapping(value="/notafiscal/{id}", method = RequestMethod.GET)
 	@ApiOperation(value = "Retorna dados da nota fiscal pelo número pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<?> montaNotaFiscal(@PathVariable Long id) {
 		NotaFiscalBO p = pedidoService.montaNotaFiscal(id);
 		return ResponseEntity.ok().body(p);
@@ -52,6 +69,11 @@ public class PedidoController {
 	
 	@RequestMapping(value="/todos", method = RequestMethod.GET)
 	@ApiOperation(value = "Busca pedidos")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Busca realizado com sucesso"),
+			@ApiResponse(code = 404, message = "Não foi possível localizar"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<List<PedidoBO>> buscarProdutos() {
 		List<PedidoBO> pedidos = pedidoService.litarPedidos();
 		return ResponseEntity.ok().body(pedidos);
@@ -59,6 +81,10 @@ public class PedidoController {
 
 	@RequestMapping(value= "semProduto", method = RequestMethod.POST)
 	@ApiOperation(value = "Salva um pedido sem item de pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Inclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> salvarPedidoSemProduto(@RequestBody PedidoBO pedido){
 		Integer identificadorPedido = pedidoService.incluirPedidoSemProduto(pedido);
 		URI uri = ServletUriComponentsBuilder
@@ -71,6 +97,10 @@ public class PedidoController {
 	
 	@RequestMapping(value= "comProduto", method = RequestMethod.POST)
 	@ApiOperation(value = "Salva um pedido com item de pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Inclusão realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> salvarPedidoComProduto(@RequestBody PedidoBO pedido){
 		Integer identificadorPedido = pedidoService.incluirPedidoComProduto(pedido);
 		URI uri = ServletUriComponentsBuilder
@@ -83,6 +113,10 @@ public class PedidoController {
 	
 	@RequestMapping(method = RequestMethod.PUT)
 	@ApiOperation(value = "Atualiza um pedido")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Atualização realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> atualizarPedido(@RequestBody PedidoBO pedido){
 		pedido = pedidoService.atualizarPedido(pedido);
 		return ResponseEntity.noContent().build();
@@ -90,6 +124,10 @@ public class PedidoController {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	@ApiOperation(value = "Deleta um pedido pelo identificador")
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Deleção realizado com sucesso"),
+			@ApiResponse(code = 500, message = "Houve algum erro no processamento da informação passada")
+	})
 	public ResponseEntity<Void> deletarPedidoPorId(@PathVariable Integer id) {
 		pedidoService.deletarPedidoPorId(id);
 		return ResponseEntity.noContent().build();
